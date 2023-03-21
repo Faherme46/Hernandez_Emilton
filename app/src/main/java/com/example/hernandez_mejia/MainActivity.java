@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.animation.TimeAnimator;
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Adapter;
 import android.widget.TextView;
@@ -28,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        setTitle(getString(R.string.listadoproducto));
 
         recycler=findViewById(R.id.rvlistado);
 
@@ -36,7 +38,9 @@ public class MainActivity extends AppCompatActivity {
         adapter.setOnItemClickListener(new ProductoAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(Producto p, int posicion) {
-                Toast.makeText(MainActivity.this, "Hice clic en "+ p.getNombre(), Toast.LENGTH_SHORT).show();
+                Intent i= new Intent(MainActivity.this,DetalleActivity.class);
+                i.putExtra("producto", p);
+                startActivity(i);
             }
 
             @Override

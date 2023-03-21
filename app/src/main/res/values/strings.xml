@@ -1,4 +1,6 @@
 <resources>
     <string name="app_name">Hernandez_mejia</string>
     <string name="eliminar">Eliminar</string>
+    <string name="listadoproducto">Listado de productos</string>
+    <string name="detalleproducto">Detalle de Producto</string>
 </resources>
