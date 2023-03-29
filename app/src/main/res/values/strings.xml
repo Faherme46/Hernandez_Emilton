@@ -3,4 +3,5 @@
     <string name="eliminar">Eliminar</string>
     <string name="listadoproducto">Listado de productos</string>
     <string name="detalleproducto">Detalle de Producto</string>
+    <string name="agrebarbutton">Agregar Producto</string>
 </resources>
