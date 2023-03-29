@@ -9,13 +9,16 @@ import android.animation.TimeAnimator;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Adapter;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.hernandez_mejia.adaptadores.ProductoAdapter;
 import com.example.hernandez_mejia.clases.Producto;
 
+import java.text.Normalizer;
 import java.util.ArrayList;
 
 
@@ -23,8 +26,10 @@ public class MainActivity extends AppCompatActivity {
 
     private ArrayList<Producto> listaProducto1;
     private RecyclerView recycler;
+    private Button btnAgregar;
 
 
+    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,6 +37,15 @@ public class MainActivity extends AppCompatActivity {
         setTitle(getString(R.string.listadoproducto));
 
         recycler=findViewById(R.id.rvlistado);
+        btnAgregar=findViewById(R.id.btnAgregar);
+
+        btnAgregar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(MainActivity.this, FormularioActivity.class);
+                startActivity(i);
+            }
+        });
 
         cargarDatos();
         ProductoAdapter adapter=new ProductoAdapter(listaProducto1);

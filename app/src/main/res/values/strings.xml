@@ -4,4 +4,7 @@
     <string name="listadoproducto">Listado de productos</string>
     <string name="detalleproducto">Detalle de Producto</string>
     <string name="agrebarbutton">Agregar Producto</string>
+    <string name="login">LOGIN</string>
+    <string name="correo">Correo Electronico</string>
+    <string name="pwd">Contraseña</string>
 </resources>
