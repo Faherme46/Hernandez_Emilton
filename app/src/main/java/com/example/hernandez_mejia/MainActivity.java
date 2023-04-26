@@ -1,5 +1,6 @@
 package com.example.hernandez_mejia;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -8,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.animation.TimeAnimator;
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Adapter;
@@ -17,6 +19,11 @@ import android.widget.Toast;
 
 import com.example.hernandez_mejia.adaptadores.ProductoAdapter;
 import com.example.hernandez_mejia.clases.Producto;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.text.Normalizer;
 import java.util.ArrayList;
@@ -59,9 +66,15 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onItemEliminarBtn(Producto p, int posicion) {
+                FirebaseFirestore firestore= FirebaseFirestore.getInstance();
+                firestore.collection("procuctos").document(p.getId()).delete();
                 Toast.makeText(MainActivity.this, "Eliminando "+p.getNombre(), Toast.LENGTH_SHORT).show();
                 listaProducto1.remove(posicion);
                 adapter.setListProductos(listaProducto1);
+
+
+
+
             }
         });
 
@@ -71,24 +84,38 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void cargarDatos(){
-        Producto p1=new Producto("Computador","https://static.vecteezy.com/system/resources/thumbnails/001/203/930/small/computer.png",3000000.0);
+        FirebaseFirestore firestore= FirebaseFirestore.getInstance();
+        firestore.collection("productos").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if(task.isSuccessful()){
+                    for (DocumentSnapshot doc:task.getResult()) {
+                        Producto p1= doc.toObject(Producto.class);
+                        p1.setId(doc.getId());
+                        listaProducto1.add(p1);
+                    }
+                }else{
+                    Toast.makeText(MainActivity.this, "No se pudo conectar al servidor", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
 
-        Producto p3=new Producto("Mouse","https://static.vecteezy.com/system/resources/previews/001/203/999/non_2x/mouse-computer-png.png",300000.0);
-
-        Producto p2=new Producto("Teclado","https://static.vecteezy.com/system/resources/previews/009/383/884/original/laptop-device-clipart-design-illustration-free-png.png",30000.0);
-
-        listaProducto1=new ArrayList<>();
-        listaProducto1.add(p1);
-        listaProducto1.add(p2);
-        listaProducto1.add(p3);
-        listaProducto1.add(p1);
-        listaProducto1.add(p2);
-        listaProducto1.add(p3);
-        listaProducto1.add(p1);
-        listaProducto1.add(p2);
-        listaProducto1.add(p3);
 
 
+
+    }
+
+    public void cerrarSesion(View view){
+        SharedPreferences preferences=getSharedPreferences("tienda_app",MODE_PRIVATE);
+        SharedPreferences.Editor e=preferences.edit();
+        e.putBoolean("logged",false);
+        e.apply();
+
+        finish();
+    }
+
+    public void agregarProducto(View view){
+        startActivity(new Intent(MainActivity.this,FormularioActivity.class));
     }
 }
 
